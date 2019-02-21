@@ -61,6 +61,7 @@ public class RRMRestApiProvider implements RestApiProvider {
         LOGGER.info("Git Issue Service");
         Map<String, Microservice> microservices = new HashMap<>(2);
         microservices.put(GitIssueService.API_CONTEXT_PATH, new GitIssueService());
+        microservices.put(MPRService.API_CONTEXT_PATH, new MPRService());
         return microservices;
     }
 }
