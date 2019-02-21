@@ -31,7 +31,7 @@ import java.net.URISyntaxException;
 /**
  * This class is do the http actions to retrieve the data from ballerina backend
  **/
-public class RRMServiceProvider {
+public class GitServiceProvider {
     private static final String HOST_URL = "http://localhost:9095/gitIssues/";
 
 

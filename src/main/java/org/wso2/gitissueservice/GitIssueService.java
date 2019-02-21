@@ -38,7 +38,7 @@ public class GitIssueService implements Microservice {
     public static final String API_CONTEXT_PATH = "/apis/gitIssues";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GitIssueService.class);
-    private RRMServiceProvider rrmServiceProvider = new RRMServiceProvider();
+    private GitServiceProvider gitServiceProvider = new GitServiceProvider();
 
     @GET
     @Path("/")
@@ -48,7 +48,7 @@ public class GitIssueService implements Microservice {
                                                  @DefaultValue("") @QueryParam("repos") String repos) {
 
         try {
-            return okResponse(rrmServiceProvider.retrieveIssuesFromRepoByLabel(labels, repos));
+            return okResponse(gitServiceProvider.retrieveIssuesFromRepoByLabel(labels, repos));
         } catch (Throwable throwable) {
             LOGGER.error("Error occurred while " + throwable.getMessage(), throwable);
             return serverErrorResponse("Error occurred while retreving the response from server");
@@ -63,7 +63,7 @@ public class GitIssueService implements Microservice {
                                                @DefaultValue("") @QueryParam("labels") String labels) {
 
         try {
-            return okResponse(rrmServiceProvider.retrieveIssuesFromProduct(productName, labels));
+            return okResponse(gitServiceProvider.retrieveIssuesFromProduct(productName, labels));
         } catch (Throwable throwable) {
             LOGGER.error("Error occurred while " + throwable.getMessage(), throwable);
             return serverErrorResponse("Error occurred while retreving the response from server");
@@ -77,7 +77,7 @@ public class GitIssueService implements Microservice {
                                            @PathParam("productName") String productName) {
 
         try {
-            return okResponse(rrmServiceProvider.retrieveRepoNamesByProduct(productName));
+            return okResponse(gitServiceProvider.retrieveRepoNamesByProduct(productName));
         } catch (Throwable throwable) {
             LOGGER.error("Error occurred while " + throwable.getMessage(), throwable);
             return serverErrorResponse("Error occurred while retreving the response from server");
@@ -90,7 +90,7 @@ public class GitIssueService implements Microservice {
     public Response retrieveReposByProduct(@Context Request request) {
 
         try {
-            return okResponse(rrmServiceProvider.retrieveProductNames());
+            return okResponse(gitServiceProvider.retrieveProductNames());
         } catch (Throwable throwable) {
             LOGGER.error("Error occurred while " + throwable.getMessage(), throwable);
             return serverErrorResponse("Error occurred while retreving the response from server");
