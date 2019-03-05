@@ -16,14 +16,21 @@
 
 package org.wso2.gitissueservice;
 
+import com.zaxxer.hikari.HikariDataSource;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.wso2.carbon.datasource.core.api.DataSourceService;
+import org.wso2.carbon.datasource.core.exception.DataSourceException;
 import org.wso2.carbon.uiserver.api.App;
 import org.wso2.carbon.uiserver.spi.RestApiProvider;
+import org.wso2.gitissueservice.utils.DataValueHolder;
 import org.wso2.msf4j.Microservice;
 
 import java.util.HashMap;
@@ -59,9 +66,33 @@ public class RRMRestApiProvider implements RestApiProvider {
     @Override
     public Map<String, Microservice> getMicroservices(App app) {
         LOGGER.info("Git Issue Service");
-        Map<String, Microservice> microservices = new HashMap<>(2);
+        Map<String, Microservice> microservices = new HashMap<>(3);
         microservices.put(GitIssueService.API_CONTEXT_PATH, new GitIssueService());
         microservices.put(MPRService.API_CONTEXT_PATH, new MPRService());
+        microservices.put(CodeCoverageService.API_CONTEXT_PATH, new CodeCoverageService());
         return microservices;
+    }
+
+    @Reference(
+            name = "org.wso2.carbon.datasource.DataSourceService",
+            service = DataSourceService.class,
+            cardinality = ReferenceCardinality.AT_LEAST_ONE,
+            policy = ReferencePolicy.DYNAMIC,
+            unbind = "unregisterDataSourceService"
+    )
+
+    protected void onDataSourceServiceReady(DataSourceService dataSourceService) {
+        try {
+            HikariDataSource dsObject = (HikariDataSource) dataSourceService.getDataSource(
+                    "WSO2_PRODUCT_COMPONENTS_TEST");
+            DataValueHolder.getInstance().setDataSource(dsObject);
+            LOGGER.info("Data Source object set.");
+        } catch (DataSourceException e) {
+            LOGGER.error("error occurred while fetching the data source.", e);
+        }
+    }
+
+    protected void unregisterDataSourceService(DataSourceService dataSourceService) {
+        LOGGER.info("Unregistering data sources sample");
     }
 }
