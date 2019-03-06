@@ -69,6 +69,7 @@ public class RRMRestApiProvider implements RestApiProvider {
         Map<String, Microservice> microservices = new HashMap<>(3);
         microservices.put(GitIssueService.API_CONTEXT_PATH, new GitIssueService());
         microservices.put(MPRService.API_CONTEXT_PATH, new MPRService());
+        microservices.put(CodeCoverageService.API_CONTEXT_PATH, new CodeCoverageService());
         microservices.put(DependencySummaryService.API_CONTEXT_PATH, new DependencySummaryService());
         return microservices;
     }
