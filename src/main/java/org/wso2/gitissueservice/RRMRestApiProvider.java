@@ -66,10 +66,11 @@ public class RRMRestApiProvider implements RestApiProvider {
     @Override
     public Map<String, Microservice> getMicroservices(App app) {
         LOGGER.info("Git Issue Service");
-        Map<String, Microservice> microservices = new HashMap<>(3);
+        Map<String, Microservice> microservices = new HashMap<>(4);
         microservices.put(GitIssueService.API_CONTEXT_PATH, new GitIssueService());
         microservices.put(MPRService.API_CONTEXT_PATH, new MPRService());
         microservices.put(CodeCoverageService.API_CONTEXT_PATH, new CodeCoverageService());
+        microservices.put(DependencySummaryService.API_CONTEXT_PATH, new DependencySummaryService());
         return microservices;
     }
 
