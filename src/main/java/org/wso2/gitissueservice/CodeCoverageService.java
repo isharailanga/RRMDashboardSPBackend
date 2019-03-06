@@ -43,21 +43,20 @@ public class CodeCoverageService implements Microservice {
                     .build();
         } catch (Throwable throwable) {
             LOGGER.error("Error occurred while " + throwable.getMessage(), throwable);
-            return serverErrorResponse("Error occurred while retreving the response from server");
+            return serverErrorResponse("Error occurred while retrieving the response from server");
         }
     }
 
     @GET
     @Path("/table-summary/{date}")
     public Response getTableSummaryForDate(@PathParam("date") String date) {
-        LOGGER.info("table-summary invoked.");
         try {
             return Response.ok(coverageServiceProvider.getTableSummaryByDate(date), MediaType.TEXT_PLAIN)
                     .header("Access-Control-Allow-Credentials", true)
                     .build();
         } catch (Throwable throwable) {
             LOGGER.error("Error occurred while " + throwable.getMessage(), throwable);
-            return serverErrorResponse("Error occurred while retreving the response from server");
+            return serverErrorResponse("Error occurred while retrieving the response from server");
         }
     }
 
