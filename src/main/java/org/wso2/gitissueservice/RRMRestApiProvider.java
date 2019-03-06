@@ -84,8 +84,7 @@ public class RRMRestApiProvider implements RestApiProvider {
 
     protected void onDataSourceServiceReady(DataSourceService dataSourceService) {
         try {
-            HikariDataSource dsObject = (HikariDataSource) dataSourceService.getDataSource(
-                    "WSO2_PRODUCT_COMPONENTS_TEST");
+            HikariDataSource dsObject = (HikariDataSource) dataSourceService.getDataSource("RRMDatasource");
             DataValueHolder.getInstance().setDataSource(dsObject);
             LOGGER.info("Data Source object set.");
         } catch (DataSourceException e) {
