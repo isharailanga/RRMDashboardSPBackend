@@ -30,6 +30,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Objects;
 
+
 /**
  * This class is to retrieve the data from wso2 product component test database.
  **/
@@ -164,6 +165,44 @@ class CoverageServiceProvider {
             closeStatement(dbConnection, productStmt, ps);
         }
         return coverageSummary;
+    }
+
+    /**
+     * get last report date from DB.
+     * @return last report date
+     */
+    JsonArray getLastReportDate() {
+        Connection dbConnection = null;
+        JsonArray dates = new JsonArray();
+
+        try {
+            dbConnection = DataValueHolder.getInstance().getDataSource().getConnection();
+        } catch (SQLException e) {
+            LOGGER.error("Database connection failure.", e);
+        }
+
+        String lastReportDateChooser = "SELECT DISTINCT CAST(DATE AS DATE) FROM CODE_COVERAGE_SUMMARY "
+                + "ORDER BY DATE DESC;";
+        try (PreparedStatement ps = Objects.requireNonNull(dbConnection).prepareStatement(lastReportDateChooser))  {
+            ResultSet summaryResult = ps.executeQuery();
+            while (summaryResult.next()) {
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("date", summaryResult.getString("CAST(DATE AS DATE)"));
+                dates.add(jsonObject);
+            }
+            summaryResult.close();
+        } catch (SQLException e) {
+            LOGGER.error("Getting last report date from database failed", e);
+        } finally {
+            try {
+                if (dbConnection != null) {
+                    dbConnection.close();
+                }
+            } catch (Exception e) {
+                LOGGER.error("Error occurred when closing SQL connection.", e);
+            }
+        }
+        return dates;
     }
 
     private void closeStatement(Connection connection, Statement prodStmt, Statement sumStmt) {

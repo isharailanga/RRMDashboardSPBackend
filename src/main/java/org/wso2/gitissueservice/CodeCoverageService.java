@@ -60,6 +60,19 @@ public class CodeCoverageService implements Microservice {
         }
     }
 
+    @GET
+    @Path("/last-report-date")
+    public Response getLastReportDate() {
+        try {
+            return Response.ok(coverageServiceProvider.getLastReportDate(), MediaType.TEXT_PLAIN)
+                    .header("Access-Control-Allow-Credentials", true)
+                    .build();
+        } catch (Throwable throwable) {
+            LOGGER.error("Error occurred while " + throwable.getMessage(), throwable);
+            return serverErrorResponse("Error occurred while retrieving the response from server");
+        }
+    }
+
     private static Response serverErrorResponse(String message) {
         return Response.serverError().entity(message).build();
     }
