@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.wso2.gitissueservice;
+package org.wso2.mprservice;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,31 +24,28 @@ import org.wso2.msf4j.Request;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
 /**
- * This service will work as a interconnected
+ * This service will work as a interconnected.
  */
 
-public class GitIssueService implements Microservice {
-    public static final String API_CONTEXT_PATH = "/apis/gitIssues";
+public class MPRService implements Microservice {
+    public static final String API_CONTEXT_PATH = "/apis/mprSummary";
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(GitIssueService.class);
-    private GitServiceProvider gitServiceProvider = new GitServiceProvider();
+    private static final Logger LOGGER = LoggerFactory.getLogger(MPRService.class);
+    private MPRServiceProvider mprServiceProvider = new MPRServiceProvider();
 
     @GET
-    @Path("/")
+    @Path("/products")
     @Produces({"application/json"})
-    public Response retrieveAllIssuesByRepoNames(@Context Request request,
-                                                 @DefaultValue("") @QueryParam("labels") String labels,
-                                                 @DefaultValue("") @QueryParam("repos") String repos) {
-
+    public Response retrieveProducts(@Context Request request) {
+        LOGGER.info("products endpoint hits");
         try {
-            return okResponse(gitServiceProvider.retrieveIssuesFromRepoByLabel(labels, repos));
+            return okResponse(mprServiceProvider.retrieveProducts());
         } catch (Throwable throwable) {
             LOGGER.error("Error occurred while " + throwable.getMessage(), throwable);
             return serverErrorResponse("Error occurred while retreving the response from server");
@@ -56,14 +53,13 @@ public class GitIssueService implements Microservice {
     }
 
     @GET
-    @Path("/product/{productName}")
+    @Path("/versions")
     @Produces({"application/json"})
     public Response retrieveAllIssuesByProduct(@Context Request request,
-                                               @PathParam("productName") String productName,
-                                               @DefaultValue("") @QueryParam("labels") String labels) {
+                                               @DefaultValue("") @QueryParam("product") String product) {
 
         try {
-            return okResponse(gitServiceProvider.retrieveIssuesFromProduct(productName, labels));
+            return okResponse(mprServiceProvider.retrieveVersions(product));
         } catch (Throwable throwable) {
             LOGGER.error("Error occurred while " + throwable.getMessage(), throwable);
             return serverErrorResponse("Error occurred while retreving the response from server");
@@ -71,31 +67,36 @@ public class GitIssueService implements Microservice {
     }
 
     @GET
-    @Path("/repos/{productName}")
+    @Path("/prcount")
     @Produces({"application/json"})
-    public Response retrieveReposByProduct(@Context Request request,
-                                           @PathParam("productName") String productName) {
+    public Response retrievePRCountbyStatus(@Context Request request,
+                                            @DefaultValue("") @QueryParam("product") String product,
+                                            @DefaultValue("") @QueryParam("version") String version) {
 
         try {
-            return okResponse(gitServiceProvider.retrieveRepoNamesByProduct(productName));
+            return okResponse(mprServiceProvider.retrievePRCountbyStatus(product, version));
         } catch (Throwable throwable) {
             LOGGER.error("Error occurred while " + throwable.getMessage(), throwable);
             return serverErrorResponse("Error occurred while retreving the response from server");
         }
     }
+
 
     @GET
-    @Path("/products/")
+    @Path("/totalprcount")
     @Produces({"application/json"})
-    public Response retrieveReposByProduct(@Context Request request) {
+    public Response retrieveTotalPRCount(@Context Request request,
+                                         @DefaultValue("") @QueryParam("product") String product,
+                                         @DefaultValue("") @QueryParam("version") String version) {
 
         try {
-            return okResponse(gitServiceProvider.retrieveProductNames());
+            return okResponse(mprServiceProvider.retrieveTotalPRCount(product, version));
         } catch (Throwable throwable) {
             LOGGER.error("Error occurred while " + throwable.getMessage(), throwable);
             return serverErrorResponse("Error occurred while retreving the response from server");
         }
     }
+
 
     private static Response okResponse(Object content) {
         return Response.ok().entity(content).build();
