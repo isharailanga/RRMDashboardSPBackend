@@ -30,7 +30,6 @@ import org.wso2.carbon.config.ConfigurationException;
 import org.wso2.carbon.uiserver.spi.RestApiProvider;
 import org.wso2.mprservice.beans.RRMConfigurations;
 import org.wso2.mprservice.internal.DataHolder;
-import org.wso2.mprservice.internal.EmptyUrlException;
 
 
 import java.io.IOException;
@@ -43,7 +42,7 @@ import java.net.URISyntaxException;
 public class MPRServiceProvider {
 
     private static final Logger logger = LoggerFactory.getLogger(RestApiProvider.class);
-    private String hostUrl = "http://localhost:9099";
+    private String hostUrl = "";
 
     public MPRServiceProvider() {
 
@@ -52,14 +51,12 @@ public class MPRServiceProvider {
                     .getConfigurationObject(RRMConfigurations.class).getMprBackendUrl();
 
             if (StringUtils.isEmpty(hostUrl)) {
-                throw new EmptyUrlException("No MPR dashboard backend URL defined.");
+                logger.info("No MPR dashboard backend URL defined.");
             }
 
-        } catch (ConfigurationException errorMsg) {
-            String error = "Error occurred while reading configs from deployment.yaml. " + errorMsg.getMessage();
-            logger.info(error);
-        } catch (EmptyUrlException errorMsg) {
-            logger.info(errorMsg.getMessage());
+        } catch (ConfigurationException e) {
+            String error = "Error occurred while reading configs from deployment.yaml. " + e.getMessage();
+            logger.info(error, e);
         }
 
     }
