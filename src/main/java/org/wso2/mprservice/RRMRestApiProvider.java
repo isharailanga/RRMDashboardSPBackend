@@ -45,16 +45,16 @@ import java.util.Map;
 public class RRMRestApiProvider implements RestApiProvider {
 
     public static final String DASHBOARD_PORTAL_APP_NAME = "portal";
-    private static final Logger LOGGER = LoggerFactory.getLogger(RestApiProvider.class);
+    private static final Logger logger = LoggerFactory.getLogger(RestApiProvider.class);
 
     @Activate
     protected void activate(BundleContext bundleContext) {
-        LOGGER.debug("{} activated.", this.getClass().getName());
+        logger.debug("{} activated.", this.getClass().getName());
     }
 
     @Deactivate
     protected void deactivate(BundleContext bundleContext) {
-        LOGGER.debug("{} deactivated.", this.getClass().getName());
+        logger.debug("{} deactivated.", this.getClass().getName());
     }
 
     @Override
@@ -65,7 +65,7 @@ public class RRMRestApiProvider implements RestApiProvider {
     @Override
     public Map<String, Microservice> getMicroservices(App app) {
 
-        LOGGER.info("MPR Service");
+        logger.info("MPR Service");
         Map<String, Microservice> microservices = new HashMap<>(1);
         microservices.put(MPRService.API_CONTEXT_PATH, new MPRService());
         return microservices;

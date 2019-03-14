@@ -36,7 +36,7 @@ import javax.ws.rs.core.Response;
 public class MPRService implements Microservice {
     public static final String API_CONTEXT_PATH = "/apis/mprSummary";
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MPRService.class);
+    private static final Logger logger = LoggerFactory.getLogger(MPRService.class);
     private MPRServiceProvider mprServiceProvider = new MPRServiceProvider();
 
     @GET
@@ -46,7 +46,7 @@ public class MPRService implements Microservice {
         try {
             return okResponse(mprServiceProvider.retrieveProducts());
         } catch (Throwable throwable) {
-            LOGGER.error("Error occurred while " + throwable.getMessage(), throwable);
+            logger.error("Error occurred while " + throwable.getMessage(), throwable);
             return serverErrorResponse("Error occurred while retreving the response from server");
         }
     }
@@ -60,7 +60,7 @@ public class MPRService implements Microservice {
         try {
             return okResponse(mprServiceProvider.retrieveVersions(product));
         } catch (Throwable throwable) {
-            LOGGER.error("Error occurred while " + throwable.getMessage(), throwable);
+            logger.error("Error occurred while " + throwable.getMessage(), throwable);
             return serverErrorResponse("Error occurred while retreving the response from server");
         }
     }
@@ -75,7 +75,7 @@ public class MPRService implements Microservice {
         try {
             return okResponse(mprServiceProvider.retrievePRCountbyStatus(product, version));
         } catch (Throwable throwable) {
-            LOGGER.error("Error occurred while " + throwable.getMessage(), throwable);
+            logger.error("Error occurred while " + throwable.getMessage(), throwable);
             return serverErrorResponse("Error occurred while retreving the response from server");
         }
     }
@@ -91,7 +91,7 @@ public class MPRService implements Microservice {
         try {
             return okResponse(mprServiceProvider.retrieveTotalPRCount(product, version));
         } catch (Throwable throwable) {
-            LOGGER.error("Error occurred while " + throwable.getMessage(), throwable);
+            logger.error("Error occurred while " + throwable.getMessage(), throwable);
             return serverErrorResponse("Error occurred while retreving the response from server");
         }
     }

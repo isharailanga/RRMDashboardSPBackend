@@ -42,7 +42,7 @@ import java.net.URISyntaxException;
  **/
 public class MPRServiceProvider {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RestApiProvider.class);
+    private static final Logger logger = LoggerFactory.getLogger(RestApiProvider.class);
     private String hostUrl = "http://localhost:9099";
 
     public MPRServiceProvider() {
@@ -57,9 +57,9 @@ public class MPRServiceProvider {
 
         } catch (ConfigurationException errorMsg) {
             String error = "Error occurred while reading configs from deployment.yaml. " + errorMsg.getMessage();
-            LOGGER.info(error);
+            logger.info(error);
         } catch (EmptyUrlException errorMsg) {
-            LOGGER.info(errorMsg.getMessage());
+            logger.info(errorMsg.getMessage());
         }
 
     }
