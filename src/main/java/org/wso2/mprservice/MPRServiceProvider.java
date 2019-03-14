@@ -16,6 +16,7 @@
 
 package org.wso2.mprservice;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -29,6 +30,8 @@ import org.wso2.carbon.config.ConfigurationException;
 import org.wso2.carbon.uiserver.spi.RestApiProvider;
 import org.wso2.mprservice.beans.RRMConfigurations;
 import org.wso2.mprservice.internal.DataHolder;
+import org.wso2.mprservice.internal.EmptyUrlException;
+
 
 import java.io.IOException;
 import java.net.URI;
@@ -48,9 +51,15 @@ public class MPRServiceProvider {
             hostUrl = DataHolder.getInstance().getConfigProvider()
                     .getConfigurationObject(RRMConfigurations.class).getMprBackendUrl();
 
+            if (StringUtils.isEmpty(hostUrl)) {
+                throw new EmptyUrlException("No MPR dashboard backend URL defined.");
+            }
+
         } catch (ConfigurationException errorMsg) {
             String error = "Error occurred while reading configs from deployment.yaml. " + errorMsg.getMessage();
             LOGGER.info(error);
+        } catch (EmptyUrlException errorMsg) {
+            LOGGER.info(errorMsg.getMessage());
         }
 
     }

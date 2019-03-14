@@ -43,7 +43,6 @@ public class MPRService implements Microservice {
     @Path("/products")
     @Produces({"application/json"})
     public Response retrieveProducts(@Context Request request) {
-        LOGGER.info("products endpoint hits");
         try {
             return okResponse(mprServiceProvider.retrieveProducts());
         } catch (Throwable throwable) {
